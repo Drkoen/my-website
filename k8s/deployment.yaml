@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
         - name: my-website
-          image: your-dockerhub-username/my-website:latest
+          image: Drkoen/my-website:latest
           ports:
             - containerPort: 80
