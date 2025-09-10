@@ -1,29 +1,22 @@
-containers:
-  - name: nginx
-    image: nginx:alpine
-    ports:
-      - containerPort: 80
-    volumeMounts:
-      - name: website-content
-        mountPath: /usr/share/nginx/html
-  - name: git-sync
-    image: k8s.gcr.io/git-sync/git-sync:v4.0.0
-    env:
-      - name: GIT_SYNC_REPO
-        value: "https://github.com/Drkoen/my-website.git"
-      - name: GIT_SYNC_BRANCH
-        value: "main"
-      - name: GIT_SYNC_WAIT
-        value: "10"       # poll every 10s
-      - name: GIT_SYNC_ONE_TIME
-        value: "false"
-      - name: GIT_SYNC_ROOT
-        value: "/tmp/git"
-      - name: GIT_SYNC_DEST
-        value: "site"
-    volumeMounts:
-      - name: website-content
-        mountPath: /usr/share/nginx/html
-volumes:
-  - name: website-content
-    emptyDir: {}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-website
+  labels:
+    app: my-website
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-website
+  template:
+    metadata:
+      labels:
+        app: my-website
+    spec:
+      containers:
+        - name: my-website
+          image: drkoen/images:latest   # <-- Your Docker Hub image
+          ports:
+            - containerPort: 80
+          imagePullPolicy: Always        # Always pull the latest image
