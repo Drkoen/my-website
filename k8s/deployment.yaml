@@ -2,8 +2,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: my-website
-  labels:
-    app: my-website
 spec:
   replicas: 1
   selector:
@@ -15,8 +13,14 @@ spec:
         app: my-website
     spec:
       containers:
-        - name: my-website
-          image: drkoen/images:latest   # <-- Your Docker Hub image
-          ports:
-            - containerPort: 80
-          imagePullPolicy: Always        # Always pull the latest image
+      - name: my-website
+        image: nginx:alpine
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: website
+          mountPath: /usr/share/nginx/html   # nginx serves from here
+      volumes:
+      - name: website
+        persistentVolumeClaim:
+          claimName: nfs-pvc
