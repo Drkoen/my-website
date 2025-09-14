@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfs-pv
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadOnlyMany   # multiple pods can read at the same time
+  nfs:
+    server: 192.168.68.131
+    path: /mnt/Data/NFS/website/NFS   # <-- your index.html lives here
